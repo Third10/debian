@@ -4,11 +4,11 @@
 
 # debian7.sh
 ```
-wget https://raw.githubusercontent.com/najahiiii/debian/master/debian7.sh && chmod +x ./debian7.sh && ./debian7.sh
+wget https://raw.githubusercontent.com/Third10/debian/master/debian7.sh && chmod +x ./debian7.sh && ./debian7.sh
 ```
 # OPENVPN
 ```
-wget -O openvpn.sh https://raw.githubusercontent.com/najahiiii/debian/master/openvpn.sh && chmod +x openvpn.sh && ./openvpn.sh
+wget -O openvpn.sh https://raw.githubusercontent.com/Third10/debian/master/openvpn.sh && chmod +x openvpn.sh && ./openvpn.sh
 ```
 # TERIMA KASIH YA ALLAH SWT ATAS SEMUANYA
 =================================================================================
@@ -16,11 +16,11 @@ wget -O openvpn.sh https://raw.githubusercontent.com/najahiiii/debian/master/ope
 DELETEUSER OTOMATIS
 
 ```
-wget https://raw.githubusercontent.com/najahiiii/debian/master/config/deleteuserexpire.sh
+wget https://raw.githubusercontent.com/Third10/debian/master/config/deleteuserexpire.sh
 ```
 
 ```
-wget https://raw.githubusercontent.com/najahiiii/debian/master/config/userban.sh
+wget https://raw.githubusercontent.com/Third10/debian/master/config/userban.sh
 ```
 
 # crontab -e
