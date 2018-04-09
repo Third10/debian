@@ -526,14 +526,14 @@ echo "unset HISTFILE" >> /etc/profile
 clear
 echo "                                                             "  | tee -a log-install.txt
 echo "                                                             "  | tee -a log-install.txt
-echo "╲┏━┳━━━━━━━━┓╲╲" | tee -a log-install.txt
-echo "╲┃◯┃╭┻┻╮╭┻┻╮┃╲╲" | tee -a log-install.txt
-echo "╲┃╮┃┃╭╮┃┃╭╮┃┃╲╲" | tee -a log-install.txt
-echo "╲┃╯┃┗┻┻┛┗┻┻┻┻╮╲" | tee -a log-install.txt
-echo "╲┃◯┃╭╮╰╯┏━━━┳╯╲" | tee -a log-install.txt
-echo "╲┃╭┃╰┏┳┳┳┳┓◯┃╲╲" | tee -a log-install.txt
-echo "╲┃╰┃◯╰┗┛┗┛╯╭┃╲╲" | tee -a log-install.txt
-echo "╲┻━━━━━━━━━━┻╲╲" | tee -a log-install.txt
+echo "╲╲╲╲╲╲┏━┳━━━━━━━━┓╲╲╲╲╲"| tee -a log-install.txt
+echo "╲╲╲╲╲╲┃◯┃╭┻┻╮╭┻┻╮┃╲╲╲╲╲"| tee -a log-install.txt
+echo "╲╲╲╲╲╲┃╮┃┃╭╮┃┃╭╮┃┃╲╲╲╲╲"| tee -a log-install.txt
+echo "╲╲╲╲╲╲┃╯┃┗┻┻┛┗┻┻┻┻╮╲╲╲╲"| tee -a log-install.txt
+echo "╲╲╲╲╲╲┃◯┃╭╮╰╯┏━━━┳╯╲╲╲╲"| tee -a log-install.txt
+echo "╲╲╲╲╲╲┃╭┃╰┏┳┳┳┳┓◯┃╲╲╲╲╲"| tee -a log-install.txt
+echo "╲╲╲╲╲╲┃╰┃◯╰┗┛┗┛╯╭┃╲╲╲╲╲"| tee -a log-install.txt
+echo "╲╲╲╲╲╲┻━━━━━━━━━━┻╲╲╲╲╲"| tee -a log-install.txt
 echo "╲█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█"| tee -a log-install.txt
 echo "╲█░░╦─╦╔╗╦─╔╗╔╗╔╦╗╔╗░░█"| tee -a log-install.txt
 echo "╲█░░║║║╠─║─║─║║║║║╠─░░█"| tee -a log-install.txt
