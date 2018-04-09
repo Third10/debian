@@ -99,27 +99,30 @@ service php5-fpm restart
 service nginx restart
 
 # install openvpn
-wget -O /etc/openvpn/openvpn.tar "https://raw.githubusercontent.com/dathai/SSH-OpenVPN/master/API/openvpn-debian.tar"
+wget -O /etc/openvpn/openvpn.tar "https://raw.githubusercontent.com/rasta-team/MyVPS/master/openvpn.tar"
 cd /etc/openvpn/
 tar xf openvpn.tar
-wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/dathai/SSH-OpenVPN/master/API/1194.conf"
+wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/rasta-team/MyVPS/master/1194-debian.conf"
 service openvpn restart
 sysctl -w net.ipv4.ip_forward=1
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
-iptables-save > /etc/iptables_yg_baru_dibikin.conf
-wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/dathai/SSH-OpenVPN/master/API/iptables"
-chmod +x /etc/network/if-up.d/iptables
+wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/rasta-team/MyVPS/master/iptables.up.rules"
+sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
+MYIP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | grep -v '192.168'`;
+MYIP2="s/xxxxxxxxx/$MYIP/g";
+sed -i 's/port 1194/port 1194/g' /etc/openvpn/1194.conf
+sed -i $MYIP2 /etc/iptables.up.rules;
+iptables-restore < /etc/iptables.up.rules
 service openvpn restart
 
 #configure openvpn client config
 cd /etc/openvpn/
-wget -q -O /etc/openvpn/1194-client.ovpn https://raw.githubusercontent.com/najahiiii/debian/master/null/1194-client.conf
-sed -i $MYIP2 /etc/openvpn/1194-client.ovpn;
+wget -O /etc/openvpn/client.ovpn "https://raw.githubusercontent.com/rasta-team/MyVPS/master/1194-client.conf"
+sed -i $MYIP2 /etc/openvpn/client.ovpn;
 PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
-useradd -M -s /bin/false admin_ibnu
-echo "admin_ibnu:$PASS" | chpasswd
-cd
+useradd -M -s /bin/false admin_pang
+echo "admin_pang:$PASS" | chpasswd
+cp client.ovpn /home/vps/public_html/
 
 #install ovpn
 cd
