@@ -219,11 +219,19 @@ apt-get -y install fail2ban;
 service fail2ban restart
 
 # install squid3
-cd
+# Install Squid
 apt-get -y install squid3
-wget -O /etc/squid3/squid.conf "https://raw.github.com/blazevpn/autoscript/master/squid3.conf"
-sed -i $MYIP2 /etc/squid3/squid.conf;
+cp /etc/squid3/squid.conf /etc/squid3/squid.conf.orig
+wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/muchigo/VPS/master/conf/squid.conf" 
+MYIP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | grep -v '192.168'`;
+sed -i s/xxxxxxxxx/$MYIP/g /etc/squid3/squid.conf;
 service squid3 restart
+
+# Enable Firewall
+apt-get -y install ufw
+sudo ufw allow 22,80,81,222,443,8080,9700,60000/tcp
+sudo ufw allow 22,80,81,222,443,8080,9700,60000/udp
+sudo yes | ufw enable
 
 # install webmin
 cd
