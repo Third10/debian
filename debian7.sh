@@ -114,9 +114,11 @@ service openvpn restart
 
 #configure openvpn client config
 cd /etc/openvpn/
-wget -O /etc/openvpn/client.ovpn "https://raw.githubusercontent.com/dathai/SSH-OpenVPN/master/API/client-1194.conf"
-sed -i $MYIP2 /etc/openvpn/client.ovpn;
-cp client.ovpn /home/vps/public_html/
+wget -q -O /etc/openvpn/1194-client.ovpn https://raw.githubusercontent.com/najahiiii/debian/master/null/1194-client.conf
+sed -i $MYIP2 /etc/openvpn/1194-client.ovpn;
+PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
+useradd -M -s /bin/false admin_ibnu
+echo "admin_ibnu:$PASS" | chpasswd
 cd
 
 #install ovpn
