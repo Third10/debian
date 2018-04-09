@@ -1,0 +1,246 @@
+#!/bin/bash
+myip=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | head -n1`;
+myint=`ifconfig | grep -B1 "inet addr:$myip" | head -n1 | awk '{print $1}'`;
+
+flag=0
+
+echo
+
+function create_user() {
+	useradd -M $uname
+	echo "$uname:$pass" | chpasswd
+	usermod -e $expdate $uname
+
+	myip=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | head -n1`;
+	myip2="s/xxxxxxxxx/$myip/g";	
+	wget -qO /tmp/client.ovpn "https://raw.githubusercontent.com/Third10/debian/master/1194-client.conf"
+	sed -i 's/remote xxxxxxxxx 1194/remote xxxxxxxxx 443/g' /tmp/client.ovpn
+	sed -i $myip2 /tmp/client.ovpn
+	echo ""
+	echo "========================="
+	echo "โฮส IP : $myip"
+	echo "พอร์ท    : 443/22/80"
+	echo "Squid   : 8080/3128"
+	echo "========================="
+	echo "Script Modified By THIRD"
+	echo "========================="
+}
+
+function renew_user() {
+	echo "New expiration date for $uname: $expdate...";
+	usermod -e $expdate $uname
+}
+
+function delete_user(){
+	userdel $uname
+}
+
+function expired_users(){
+	cat /etc/shadow | cut -d: -f1,8 | sed /:$/d > /tmp/expirelist.txt
+	totalaccounts=`cat /tmp/expirelist.txt | wc -l`
+	for((i=1; i<=$totalaccounts; i++ )); do
+		tuserval=`head -n $i /tmp/expirelist.txt | tail -n 1`
+		username=`echo $tuserval | cut -f1 -d:`
+		userexp=`echo $tuserval | cut -f2 -d:`
+		userexpireinseconds=$(( $userexp * 86400 ))
+		todaystime=`date +%s`
+		if [ $userexpireinseconds -lt $todaystime ] ; then
+			echo $username
+		fi
+	done
+	rm /tmp/expirelist.txt
+}
+
+function not_expired_users(){
+    cat /etc/shadow | cut -d: -f1,8 | sed /:$/d > /tmp/expirelist.txt
+    totalaccounts=`cat /tmp/expirelist.txt | wc -l`
+    for((i=1; i<=$totalaccounts; i++ )); do
+        tuserval=`head -n $i /tmp/expirelist.txt | tail -n 1`
+        username=`echo $tuserval | cut -f1 -d:`
+        userexp=`echo $tuserval | cut -f2 -d:`
+        userexpireinseconds=$(( $userexp * 86400 ))
+        todaystime=`date +%s`
+        if [ $userexpireinseconds -gt $todaystime ] ; then
+            echo $username
+        fi
+    done
+	rm /tmp/expirelist.txt
+}
+
+function used_data(){
+	myip=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | head -n1`
+	myint=`ifconfig | grep -B1 "inet addr:$myip" | head -n1 | awk '{print $1}'`
+	ifconfig $myint | grep "RX bytes" | sed -e 's/ *RX [a-z:0-9]*/Received: /g' | sed -e 's/TX [a-z:0-9]*/\nTransfered: /g'
+}
+
+	clear
+	echo ""
+	echo "--------------- ยินดีต้อนรับสู่เซิร์ฟเวอร์ - IP: $myip ---------------"
+	cname=$( awk -F: '/model name/ {name=$2} END {print name}' /proc/cpuinfo )
+	cores=$( awk -F: '/model name/ {core++} END {print core}' /proc/cpuinfo )
+	freq=$( awk -F: ' /cpu MHz/ {freq=$2} END {print freq}' /proc/cpuinfo )
+	tram=$( free -m | awk 'NR==2 {print $2}' )
+	swap=$( free -m | awk 'NR==4 {print $2}' )
+	up=$(uptime|awk '{ $1=$2=$(NF-6)=$(NF-5)=$(NF-4)=$(NF-3)=$(NF-2)=$(NF-1)=$NF=""; print }')
+
+	echo -e "\e[032;1mCPU model:\e[0m $cname"
+	echo -e "\e[032;1mNumber of cores:\e[0m $cores"
+	echo -e "\e[032;1mCPU frequency:\e[0m $freq MHz"
+	echo -e "\e[032;1mจำนวน RAM ทั้งหมด:\e[0m $tram MB"
+	echo -e "\e[032;1mจำนวนรวมของ swap:\e[0m $swap MB"
+	echo -e "\e[032;1mเวลาทำงานของระบบ:\e[0m $up"
+	echo -e "\e[032;1mModified by \e[0m THIRD",
+	echo "------------------------------------------------------------------------------"
+	echo -e "\e[031;1m 1\e[0m) สร้างบัญชี SSH/OpenVPN (\e[34;1muser-add\e[0m)"
+	echo -e "\e[031;1m 2\e[0m) สร้างบัญชี SSH/OpenVPN (\e[34;1muser-gen\e[0m)"
+	echo -e "\e[031;1m 3\e[0m) สร้างบัญชีทดลองใช้ (\e[34;1muser-trial\e[0m)"
+	echo -e "\e[031;1m 4\e[0m) เปลี่ยนรหัสผ่านบัญชี SSH/VPN (\e[34;1muser-pass\e[0m)"
+	echo -e "\e[031;1m 5\e[0m) เพิ่มระเวลาใช้งานบัญชีH/OpenVPN (\e[34;1muser-renew\e[0m)"
+	echo -e "\e[031;1m 6\e[0m) ลบบัญชี SSH/OpenVPN (\e[34;1muser-del\e[0m)"
+	echo -e "\e[031;1m 7\e[0m) ตรวจสอบการเข้าสู่ระบบ Dropbear & OpenSSH (\e[34;1muser-login\e[0m)"
+	echo -e "\e[031;1m 8\e[0m) จำกัดการเข้าสู่ระบบอัตโนมัติ (\e[34;1mauto-limit\e[0m)"
+	echo -e "\e[031;1m 9\e[0m) ดูรายละเอียดผู้ใช้ SSH & OpenVPN (\e[34;1muser-detail\e[0m)"
+	echo -e "\e[031;1m10\e[0m) รายชื่อบัญชีและวันหมดอายุ (\e[34;1muser-list\e[0m)"
+	echo -e "\e[031;1m11\e[0m) ลบบัญชีที่หมดอายุ (\e[34;1mdelete-user-expire\e[0m)"
+	echo -e "\e[031;1m12\e[0m) ลบการเข้าสู่ระบบเกินกำหนด (\e[34;1mauto-kill-user\e[0m)"
+	echo -e "\e[031;1m13\e[0m) บัญชีที่ถูกแบนโดยอัตโนมัติ (\e[34;1mbanned-user\e[0m)"
+	echo -e "\e[031;1m14\e[0m) ปลดแบนบัญชี (\e[34;1munbanned-user\e[0m)"
+	echo -e "\e[031;1m15\e[0m) ล็อคบัญชี SSH & OpenVPN (\e[34;1muser-lock\e[0m)"
+	echo -e "\e[031;1m16\e[0m) เปิดบัญชี SSH & OpenVPN ทีถูกล็อก (\e[34;1muser-unlock\e[0m)"
+	echo -e "\e[031;1m17\e[0m) ดูรายชื่อบัญที่ถูกล็อคที่เข้าสู่ระบบเกินกำหนด (\e[34;1mlog-limit\e[0m)"
+	echo -e "\e[031;1m18\e[0m) ดูรายชื่อผู้ใช้ที่ถูกสั่งห้ามโดยแอดมิน (\e[34;1mlog-ban\e[0m)"
+	echo -e "\e[031;1m19\e[0m) ตรวจสอบที่ตั้งของผู้ใช้ (\e[34;1mcek-lokasi-user\e[0m)"
+	echo -e "\e[031;1m20\e[0m) ตั้งค่าการรีบูตอัตโนมัติ (\e[34;1mauto-reboot\e[0m)"
+	echo -e "\e[031;1m21\e[0m) เช็คความเร็ว (\e[34;1mcek-speedttes-vps\e[0m)"
+	echo -e "\e[031;1m22\e[0m) เช็คแรม (\e[34;1mcek-ram\e[0m)"
+	echo -e "\e[031;1m23\e[0m) แก้ไขเครดิส (\e[34;1medit-banner\e[0m)"
+	echo -e "\e[031;1m24\e[0m) แก้ไขพอร์ท (\e[34;1medit-port\e[0m)"
+	echo -e "\e[031;1m25\e[0m) Restart (\e[34;1mrestart\e[0m)"
+	echo ""
+	echo -e "\e[031;1m x\e[0m) Exit"
+	read -p "ป้อนตัวเลือกจากนั้นกดปุ่ม ENTER: " option1
+	case $option1 in
+        1)  
+          clear
+          buatakun.sh
+          ;;
+        2)  
+          clear
+          generate.sh
+          ;;
+        3)	
+          clear
+          trial.sh
+	  	  ;;	
+        4)
+          clear
+          userpass.sh
+          ;;
+        5)
+          clear
+          userrenew.sh
+	      ;;
+        6)
+           clear
+           userdelete.sh
+          ;;		
+	 	7)
+	   	   clear
+	   	   userlogin.sh
+	      ;;
+	 	8)
+           clear
+	       autolimit.sh
+	   	  ;;	
+	 	9)
+	       clear
+           userdetail.sh
+          ;;
+        10)
+           clear
+           user-list.sh
+          ;;
+        11)
+           clear
+           deleteuserexpire.sh
+	      ;;
+		12)
+		   clear
+		   read -p "เพิ่มการเข้าสู่ระบบผู้ใช้สูงสุด (1-2): " MULTILOGIN
+		   echo "    AUTO KILL MULTI LOGIN    "    
+		   echo "-----------------------------"
+	           	autokilluser.sh  $MULTILOGIN
+		   		autokill.sh  $MULTILOGIN
+	       echo "-----------------------------"
+	       echo "AUTO KILL MULTI LOGIN FINISH"
+	      ;;
+    	13)
+       	   clear
+           userban.sh
+	      ;;
+		14)
+           clear
+           userunban.sh
+	      ;;
+        15)
+	       clear
+           userlock.sh
+	      ;;
+    	16)
+       	   clear
+           userunlock.sh
+	      ;;
+		17)
+	       clear
+	       loglimit.sh
+	      ;;
+		18)
+           clear
+           logban.sh
+	      ;;
+    	19)
+	       clear
+	       userlogin.sh
+           echo "ตัวอย่าง: 49.0.35.16 จากนั้นกด Enter"
+           read -p "ที่อยู่ IP ของผู้ใช้ประเภทหนึ่ง: " userip
+           curl ipinfo.io/$userip
+         ;;
+		20)
+	       clear
+           autoreboot.sh
+         ;;
+		21)
+		   clear
+	        #!/bin/bash
+	        red='\e[1;31m'
+	        green='\e[0;32m'
+	        blue='\e[1;34m'
+	        NC='\e[0m'
+	        echo "Speed Tes Server"
+	        speedtest.py.sh
+          ;;
+        22)
+           clear
+           ram.sh
+          ;;
+        23)
+	  	   clear
+	  	   echo -e "1.) บันทึกข้อความกด (CTRL + X, จากนั้นพิมพ์ Y และกด Enter) "  | tee -a log-install.txt
+           echo -e "2.) ยกเลิกแก้ไขข้อความ (CTRL + X, จากนั้นพิมพ์ N และกด Enter)"  | tee -a log-install.txt
+           echo "-----------------------------------------------------------"  | tee -a log-install.txt
+           read -p "กด ENTER เพื่อดำเนินการต่อ........................ "
+           nano /bannerssh
+           /etc/init.d/dropbear restart
+	  	  ;;
+        24)
+           clear
+           ubahport.sh
+	      ;;
+        25)
+	       clear
+	       reboot
+          ;;
+        x)
+          ;;
+        *) menu;;
+        esac
