@@ -99,28 +99,24 @@ service php5-fpm restart
 service nginx restart
 
 # install openvpn
-cd
-apt-get -y install openvpn
-wget -q -O /etc/openvpn/openvpn.tar "https://raw.githubusercontent.com/Third10/debian/master/app/openvpn-debian.tar"
+wget -O /etc/openvpn/openvpn.tar "https://raw.githubusercontent.com/dathai/SSH-OpenVPN/master/API/openvpn-debian.tar"
 cd /etc/openvpn/
 tar xf openvpn.tar
-wget -q -O /etc/openvpn/1194.conf https://raw.githubusercontent.com/Third10/debian/master/null/1194.conf
+wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/dathai/SSH-OpenVPN/master/API/1194.conf"
 service openvpn restart
 sysctl -w net.ipv4.ip_forward=1
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-wget -q -O /etc/iptables.up.rules https://raw.githubusercontent.com/Third10/debian/master/null/iptables.up.rules
-sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
-sed -i $MYIP2 /etc/iptables.up.rules;
-iptables-restore < /etc/iptables.up.rules
+iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
+iptables-save > /etc/iptables_yg_baru_dibikin.conf
+wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/dathai/SSH-OpenVPN/master/API/iptables"
+chmod +x /etc/network/if-up.d/iptables
 service openvpn restart
 
 #configure openvpn client config
 cd /etc/openvpn/
-wget -q -O /etc/openvpn/1194-client.ovpn https://raw.githubusercontent.com/Third10/debian/master/null/1194-client.conf
-sed -i $MYIP2 /etc/openvpn/1194-client.ovpn;
-PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
-useradd -M -s /bin/false admin_ibnu
-echo "admin_ibnu:$PASS" | chpasswd
+wget -O /etc/openvpn/client.ovpn "https://raw.githubusercontent.com/dathai/SSH-OpenVPN/master/API/client-1194.conf"
+sed -i $MYIP2 /etc/openvpn/client.ovpn;
+cp client.ovpn /home/vps/public_html/
 cd
 
 #install ovpn
@@ -224,8 +220,9 @@ apt-get -y install fail2ban;
 service fail2ban restart
 
 # install squid3
+cd
 apt-get -y install squid3
-wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/Third10/debian/master/squid.conf"
+wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/dathai/SSH-OpenVPN/master/API/squid3.conf"
 sed -i $MYIP2 /etc/squid3/squid.conf;
 service squid3 restart
 
