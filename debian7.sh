@@ -526,19 +526,19 @@ echo "unset HISTFILE" >> /etc/profile
 clear
 echo "                                                             "  | tee -a log-install.txt
 echo "                                                             "  | tee -a log-install.txt
-echo "┏━━━━━━━━┳━━┳━━┳━━┳━━━━━━━━┳━━━━━━━━╮━━━━━━━╮━┫" | tee -a log-install.txt
-echo "┃▓▓THIRDZ▓┃▓▓┃╱╱┃▓▓┃▓▓▓▓▓▓▓▓┃▓▓▓▓▓▓▓▓┃▓▓▓▓▓▓▓┃" | tee -a log-install.txt
-echo "┣━━┓▓▓┏━━┫▓▓┃╱╱┃▓▓┣━━┓▓▓┏━━┫▓▓▓╭╮▓▓▓┃▓▓┏━━╮▓┃" | tee -a log-install.txt
-echo "           ┃▓▓┃        ┃▓▓┃╱╱┃▓▓┃       ┃▓▓┃        ┃▓▓▓┃┃▓▓▓┃▓▓┃╱╱┃▓┃" | tee -a log-install.txt
-echo "           ┃▓▓┃        ┃▓▓┗━━┛▓▓┃       ┃▓▓┃        ┃▓▓▓╰╯▓▓▓┃▓▓┃╱╱┃▓┃" | tee -a log-install.txt
-echo "           ┃▓▓┃        ┃▓▓▓▓▓▓▓▓┃       ┃▓▓┃        ┃▓▓▓▓▓▓▓/  ┃▓▓┃╱╱┃▓┃" | tee -a log-install.txt
-echo "           ┃▓▓┃        ┃▓▓▓▓▓▓▓▓┃       ┃▓▓┃        ┃▓▓┳╮▓ ━╯   ┃▓▓┃╱╱┃▓┃" | tee -a log-install.txt
-echo "           ┃▓▓┃        ┃▓▓┏━━┓▓▓┃       ┃▓▓┃        ┃▓▓┃   \▓▓\     ┃▓▓┃╱╱┃▓┃" | tee -a log-install.txt
-echo "           ┃▓▓┃        ┃▓▓┃╱╱┃▓▓┃       ┃▓▓┃        ┃▓▓┃      \▓▓\  ┃▓▓┃╱╱┃▓┃" | tee -a log-install.txt
-echo "           ┃▓▓┃        ┃▓▓┃╱╱┃▓▓┣━━┛▓▓┗━━┫▓▓┃        \▓▓\┃▓▓┗━━╯▓┃" | tee -a log-install.txt
-echo "           ┃▓▓┃        ┃▓▓┃╱╱┃▓▓┃▓▓▓▓▓▓▓▓┃▓▓┃         |▓▓ |┃▓▓▓▓▓▓▓┃"  | tee -a log-install.txt
-echo "╱╱╱┻━━┻━━┻━━┻━━┻━━┻━━━━━━━━┻━━┻━━┻━━┻━━━━━━━╯━┫" | tee -a log-install.txt
-echo "                                                             "  | tee -a log-install.txt
+echo "╲┏━┳━━━━━━━━┓╲╲" | tee -a log-install.txt
+echo "╲┃◯┃╭┻┻╮╭┻┻╮┃╲╲" | tee -a log-install.txt
+echo "╲┃╮┃┃╭╮┃┃╭╮┃┃╲╲" | tee -a log-install.txt
+echo "╲┃╯┃┗┻┻┛┗┻┻┻┻╮╲" | tee -a log-install.txt
+echo "╲┃◯┃╭╮╰╯┏━━━┳╯╲" | tee -a log-install.txt
+echo "╲┃╭┃╰┏┳┳┳┳┓◯┃╲╲" | tee -a log-install.txt
+echo "╲┃╰┃◯╰┗┛┗┛╯╭┃╲╲" | tee -a log-install.txt
+echo "╲┻━━━━━━━━━━┻╲╲" | tee -a log-install.txt
+echo "╲█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█"| tee -a log-install.txt
+echo "╲█░░╦─╦╔╗╦─╔╗╔╗╔╦╗╔╗░░█"| tee -a log-install.txt
+echo "╲█░░║║║╠─║─║─║║║║║╠─░░█"| tee -a log-install.txt
+echo "╲█░░╚╩╝╚╝╚╝╚╝╚╝╩─╩╚╝░░█"| tee -a log-install.txt
+echo "╲█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█"| tee -a log-install.txt
 echo "                   ติดตั้งโดย by THIRDZ              "  | tee -a log-install.txt
 echo "                                                             "  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
